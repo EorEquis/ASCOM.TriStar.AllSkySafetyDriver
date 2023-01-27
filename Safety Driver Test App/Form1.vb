@@ -20,11 +20,14 @@
     Private Sub buttonConnect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buttonConnect.Click
         If (IsConnected) Then
             driver.Connected = False
+            Timer1.Enabled = False
         Else
             driver = New ASCOM.DriverAccess.SafetyMonitor(My.Settings.DriverId)
             driver.Connected = True
+            Timer1.Enabled = True
         End If
         SetUIState()
+
     End Sub
 
     Private Sub Form1_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
@@ -41,6 +44,7 @@
         buttonConnect.Enabled = Not String.IsNullOrEmpty(My.Settings.DriverId)
         buttonChoose.Enabled = Not IsConnected
         buttonConnect.Text = IIf(IsConnected, "Disconnect", "Connect")
+
     End Sub
 
     ''' <summary>
@@ -61,8 +65,14 @@
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If IsConnected Then
             cbIsSafe.Checked = driver.IsSafe
+            TextBox1.Text = Now().ToString
         End If
 
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        cbIsSafe.Checked = driver.IsSafe
+        TextBox1.Text = Now().ToString
     End Sub
 
     ' TODO: Add additional UI and controls to test more of the driver being tested.

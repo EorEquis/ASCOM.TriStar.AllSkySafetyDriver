@@ -16,14 +16,11 @@
 ' Date			Who	Vers	Description
 ' -----------	---	-----	-------------------------------------------------------
 ' 2022-12-25	EOR	2.0.0	Initial edit, from SafetyMonitor template
+' 2023-01-27	EOR	2.0.1	Clean up, remove all weather references, AllSkyAI only
 ' ---------------------------------------------------------------------------------
 
 #Const Device = "SafetyMonitor"
 
-Imports System
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Globalization
 Imports System.Net
 
 
@@ -51,7 +48,7 @@ Public Class SafetyMonitor
     Private Shared driverDescription As String = "TriStar SafetyMonitor"
     Private majorVersion As String = "2"
     Private minorVersion As String = "0"
-    Private buildVersion As String = "0"
+    Private buildVersion As String = "1"
 
     'Constants used for Profile persistence
     Friend Shared URLProfileName As String = "URL"
@@ -66,7 +63,7 @@ Public Class SafetyMonitor
     Private connectedState As Boolean
     Private TL As TraceLogger
 
-    Private wx As Weather
+    Private AllSky As AllSkyAI
     Private SafetyTimer As System.Timers.Timer
     Private csFailCount As Integer = 0
 
@@ -179,7 +176,7 @@ Public Class SafetyMonitor
 
             If value Then
                 If CheckFile(URL) = True Then
-                    wx = New Weather
+                    AllSky = New AllSkyAI
                     checkSafety()
                     connectedState = True
                     SafetyTimer.Enabled = True
@@ -188,7 +185,7 @@ Public Class SafetyMonitor
                     Throw New DriverException("Connection to weather file failed")
                     connectedState = False
                     SafetyTimer.Enabled = False
-                    wx = Nothing
+                    AllSky = Nothing
                     TL.LogMessage("Connected Set ERROR", "Failed to connect")
                 End If
             Else
@@ -260,15 +257,6 @@ Public Class SafetyMonitor
                 TL.LogMessage("IsSafe Get", "False")
                 Return False
             End If
-
-            ' We'll bring this back when WX station is wokring again
-            '            If wx.Alert = 0 Then
-            '            TL.LogMessage("IsSafe Get", "True")
-            '            Return True
-            '            Else
-            '            TL.LogMessage("IsSafe Get", "False")
-            '            Return False
-            '            End If
         End Get
     End Property
 
@@ -371,21 +359,16 @@ Public Class SafetyMonitor
 
     Private Sub checkSafety()
         Try
-            ' wx = New Weather
             Dim webclient As New WebClient
             Dim response As String = webclient.DownloadString(URL)
-            wx = JsonConvert.DeserializeObject(Of Weather)(response)
-            Alert = wx.Alert
-            LastWrite = Convert.ToDateTime(wx.LastWrite)
-            AllSkyAISky = wx.AllSkyAISky
-            AllSkyAIConfidence = CDbl(wx.AllSkyAIConfidence)
-            UTC = CDbl(wx.UTC)
+            AllSky = JsonConvert.DeserializeObject(Of AllSkyAI)(response)
+            AllSkyAISky = AllSky.AllSkyAISky
+            AllSkyAIConfidence = CDbl(AllSky.AllSkyAIConfidence)
+            UTC = CDbl(AllSky.UTC)
             LastAI = nDateTime.AddSeconds(UTC)
 
             TL.LogMessage("checkSafety", "Read JSON at " + DateTime.Now.ToUniversalTime.ToString("yyyy-MM-dd HH:mm:ss") + " UTC")
-            TL.LogMessage("checkSafety", "LastWrite is " + LastWrite.ToString("yyyy-MM-dd HH:mm:ss") + " UTC")
             TL.LogMessage("checkSafety", "LastAI is " + LastAI.ToString("yyyy-MM-dd HH:mm:ss") + " UTC")
-            TL.LogMessage("checkSafety", "Alert is " + Alert.ToString)
             TL.LogMessage("checkSafety", "AllSkyAISky is " + AllSkyAISky)
             TL.LogMessage("checkSafety", "AllSkyAIConfidence is " + AllSkyAIConfidence.ToString)
             If AllSkyAISky = "clear" OrElse AllSkyAISky = "light_clouds" Then
@@ -394,18 +377,17 @@ Public Class SafetyMonitor
                 AISkySafe = False
             End If
             If DateDiff(DateInterval.Minute, LastAI, DateTime.Now.ToUniversalTime) > 5 Then
-                wx.Alert = 1
+                AISkySafe = False
                 TL.LogMessage("checkSafety ERROR", "Unsafe set, LastAI too old!")
             End If
-            TL.LogMessage("checkSafety", "Alert " + wx.Alert.ToString)
+            TL.LogMessage("checkSafety", "AI Sky Safe is " + AISkySafe.ToString)
             csFailCount = 0
         Catch ex As Exception
             csFailCount = csFailCount + 1
             If csFailCount > 1 Then
-                wx.Alert = 1
+                AISkySafe = False
                 TL.LogMessage("checkSafety ERROR", ex.Message)
             End If
-            ' Throw New DriverException("checkSafety failed.  Check log for details")
         End Try
     End Sub
 

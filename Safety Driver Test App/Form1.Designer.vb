@@ -22,11 +22,15 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.labelDriverId = New System.Windows.Forms.Label()
         Me.buttonConnect = New System.Windows.Forms.Button()
         Me.buttonChoose = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.cbIsSafe = New System.Windows.Forms.CheckBox()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
         'labelDriverId
@@ -60,28 +64,50 @@ Partial Class Form1
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(27, 98)
+        Me.Button1.Location = New System.Drawing.Point(92, 98)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.Size = New System.Drawing.Size(129, 23)
         Me.Button1.TabIndex = 6
-        Me.Button1.Text = "Button1"
+        Me.Button1.Text = "Check Safety"
         Me.Button1.UseVisualStyleBackColor = True
         '
         'cbIsSafe
         '
         Me.cbIsSafe.AutoSize = True
-        Me.cbIsSafe.Location = New System.Drawing.Point(140, 98)
+        Me.cbIsSafe.Location = New System.Drawing.Point(227, 102)
         Me.cbIsSafe.Name = "cbIsSafe"
         Me.cbIsSafe.Size = New System.Drawing.Size(56, 17)
         Me.cbIsSafe.TabIndex = 7
         Me.cbIsSafe.Text = "IsSafe"
         Me.cbIsSafe.UseVisualStyleBackColor = True
         '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(227, 135)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(161, 20)
+        Me.TextBox1.TabIndex = 8
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(127, 138)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(94, 13)
+        Me.Label1.TabIndex = 9
+        Me.Label1.Text = "Last Safety Check"
+        '
+        'Timer1
+        '
+        Me.Timer1.Interval = 30000
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(400, 233)
+        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.cbIsSafe)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.labelDriverId)
@@ -98,4 +124,7 @@ Partial Class Form1
     Private WithEvents buttonChoose As System.Windows.Forms.Button
     Friend WithEvents Button1 As Button
     Friend WithEvents cbIsSafe As CheckBox
+    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Timer1 As Timer
 End Class

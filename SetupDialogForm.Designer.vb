@@ -29,6 +29,7 @@ Partial Class SetupDialogForm
         Me.label2 = New System.Windows.Forms.Label()
         Me.chkTrace = New System.Windows.Forms.CheckBox()
         Me.txtURL = New System.Windows.Forms.TextBox()
+        Me.lbl_Ver = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -105,6 +106,15 @@ Partial Class SetupDialogForm
         Me.txtURL.Size = New System.Drawing.Size(251, 20)
         Me.txtURL.TabIndex = 9
         '
+        'lbl_Ver
+        '
+        Me.lbl_Ver.AutoSize = True
+        Me.lbl_Ver.Location = New System.Drawing.Point(13, 203)
+        Me.lbl_Ver.Name = "lbl_Ver"
+        Me.lbl_Ver.Size = New System.Drawing.Size(41, 13)
+        Me.lbl_Ver.TabIndex = 10
+        Me.lbl_Ver.Text = "V 2.0.1"
+        '
         'SetupDialogForm
         '
         Me.AcceptButton = Me.OK_Button
@@ -112,6 +122,7 @@ Partial Class SetupDialogForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(359, 229)
+        Me.Controls.Add(Me.lbl_Ver)
         Me.Controls.Add(Me.txtURL)
         Me.Controls.Add(Me.chkTrace)
         Me.Controls.Add(Me.label2)
@@ -137,4 +148,5 @@ Partial Class SetupDialogForm
     Private WithEvents label2 As System.Windows.Forms.Label
     Friend WithEvents chkTrace As System.Windows.Forms.CheckBox
     Friend WithEvents txtURL As TextBox
+    Friend WithEvents lbl_Ver As Label
 End Class
