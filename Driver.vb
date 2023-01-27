@@ -45,7 +45,7 @@ Public Class SafetyMonitor
 
     ' Driver info
     Friend Shared driverID As String = "ASCOM.TriStar.SafetyMonitor"
-    Private Shared driverDescription As String = "TriStar SafetyMonitor"
+    Private Shared driverDescription As String = "TriStar AllSky SafetyMonitor"
     Private majorVersion As String = "2"
     Private minorVersion As String = "0"
     Private buildVersion As String = "1"
